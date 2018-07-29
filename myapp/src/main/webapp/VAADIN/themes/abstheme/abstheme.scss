@@ -1,0 +1,624 @@
+// If you edit this file you need to compile the theme. See README.md for details.
+
+// Global variable overrides. Must be declared before importing Valo.
+
+// Defines the plaintext font size, weight and family. Font size affects general component sizing.
+//$v-font-size: 16px;
+//$v-font-weight: 300;
+//$v-font-family: "Open Sans", sans-serif;
+
+// Defines the border used by all components.
+//$v-border: 1px solid (v-shade 0.7);
+//$v-border-radius: 4px;
+
+// Affects the color of some component elements, e.g Button, Panel title, etc
+//$v-background-color: hsl(210, 0%, 98%);
+// Affects the color of content areas, e.g  Panel and Window content, TextField input etc
+//$v-app-background-color: $v-background-color;
+
+// Affects the visual appearance of all components
+//$v-gradient: v-linear 8%;
+//$v-bevel-depth: 30%;
+//$v-shadow-opacity: 5%;
+
+// Defines colors for indicating status (focus, success, failure)
+//$v-focus-color: valo-focus-color(); // Calculates a suitable color automatically
+//$v-friendly-color: #2c9720;
+//$v-error-indicator-color: #ed473b;
+
+// For more information, see: https://vaadin.com/book/-/page/themes.valo.html
+// Example variants can be copy/pasted from https://vaadin.com/wiki/-/wiki/Main/Valo+Examples
+
+$v-luminance-threshold: 180 !default;
+
+$editor-background-color: #e7eff6 !default;
+$valo-menu-background-color: $editor-background-color !default;
+
+$v-focus-color: rgb(96, 160, 234) !default;
+$v-error-indicator-color: #eb2977 !default;
+$v-friendly-color: rgb(54, 185, 85);
+
+$v-font-size: 13px !default;
+$v-font-weight: 400 !default;
+$v-unit-size: 32px !default;
+
+$login-info-width: 300px !default;
+$login-info-opacity: 0.7 !default;
+$login-background-color: $editor-background-color !default;
+// Get more background images from unsplash.com (remember to optimize the filesize)
+$login-background-image: "img/archetype-login-bg.jpg" !default;
+
+$editor-shadow: 0 0 10px 10px rgba(0,0,0,.1) !default;
+$editor-embed-background-color: darken($editor-background-color, 5%) !default;
+$editor-raised-background-color: lighten($editor-background-color, 10%) !default;
+$editor-caption-font-color: valo-font-color($editor-background-color, 0.5) !default;
+
+$v-layout-margin-top: round($v-unit-size / 1.5) !default;
+$v-layout-margin-right: $v-layout-margin-top !default;
+$v-layout-margin-bottom: $v-layout-margin-top !default;
+$v-layout-margin-left: $v-layout-margin-top !default;
+$v-layout-spacing-vertical: round($v-unit-size / 1.8) !default;
+$v-layout-spacing-horizontal: round($v-unit-size / 1.8) !default;
+
+
+@import "../valo/valo.scss";
+
+
+@mixin abstheme {
+  @include valo;
+
+
+  // login screen - for small screens, see below
+  .login-screen {
+    background: $editor-background-color;
+
+    @if $login-background-image {
+      background-image: url(#{$login-background-image});
+      background-size: cover;
+      background-position: 50% 50%;
+    }
+
+    width: 100%;
+    height: 100%;
+
+    .login-form {
+      @include valo-panel-style;
+      border: none;
+      padding: $v-layout-margin;
+      @include valo-animate-in-fade($duration: 1s);
+    }
+
+    .login-information {
+      display: inline-block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: $login-info-width;
+      height: 100%;
+      background: $v-selection-color; // For IE8
+      background-color: rgba($v-selection-color, $login-info-opacity);
+      padding: $v-layout-margin;
+      color: valo-font-color($v-selection-color, 0.9);
+      @include animation(valo-animate-in-fade 1s 1s backwards);
+
+      h1 {
+        color: inherit;
+      }
+    }
+
+    .centering-layout {
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      padding-left: $login-info-width;
+
+      .v-slot {
+        height: 100%;
+      }
+    }
+  }
+
+  // About view
+
+  .about-view {
+    overflow: auto;
+
+    .about-content {
+      @include valo-panel-style;
+      max-width: 500px;
+      // Override the default of CustomLayout
+      padding: $v-unit-size !important;
+    }
+  }
+
+  // Style rules for smaller display sizes
+
+  // No top menu on the login view, login screen layout changes
+  .v-ui[width-range~="0-800px"] {
+
+    .main-screen {
+      padding-top: $v-unit-size;
+    }
+    // TODO also move loading indicator if using the hack above
+
+    // More compact login screen
+    .login-screen {
+      height: auto;
+      min-height: 100%;
+
+      .login-information {
+        position: static;
+        width: 100%;
+        height: auto;
+
+        .v-label {
+          text-align: center;
+
+          h1 {
+            margin-top: .4em;
+          }
+        }
+      }
+
+      .centering-layout {
+        display: block;
+        width: 100%;
+        height: auto;
+        padding-left: 0;
+        padding-top: 60px;
+        padding-bottom: 60px;
+      }
+
+      .login-form {
+        width: 400px;
+        max-width: 100%;
+
+        table {
+          width: 100%;
+        }
+
+        .v-textfield {
+          width: 100% !important;
+        }
+
+        .v-formlayout-captioncell,
+        .v-formlayout-contentcell,
+        .v-formlayout-errorcell {
+          display: block;
+          text-align: center;
+          padding-top: 0;
+        }
+        .buttons {
+          width: 100%;
+          .v-button {
+            display: block;
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+
+  // hide the logo for a more compact header when the menu is narrow
+  /*.v-ui[width-range~="801px-1100px"] .valo-menu-part {
+    .v-slot-logo,
+    .v-slot-logo + .v-spacing {
+      display: none;
+    }
+  }*/
+
+ 
+
+  // Editor should take whole browser width when we are under 550px in width.
+  .v-ui[width-range~="0-550px"] {
+    .product-form-wrapper {
+      width:100%;
+    }
+
+    // Remove margins around the grid and reduce top bar margins on small screens
+    .crud-view .crud-main-layout {
+      padding: 0 0 0 0;
+	  background-color:#E84855;
+      .top-bar {
+        // Use spacing to the grid below as the margin - smaller than default margin
+        padding: $v-layout-spacing-vertical $v-layout-spacing-horizontal 0 $v-layout-spacing-horizontal;
+
+        .filter-textfield {
+          width: 100%;
+        }
+      }
+    }
+
+    // About view fills the display on small screens
+    .about-view {
+      padding-bottom: 0;
+      padding-top: 0;
+      height: auto;
+      padding: 0.1 * $v-unit-size;
+
+      .v-slot-about-content {
+        overflow: auto;
+      }
+
+      .about-content {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        vertical-align: top;
+        padding: 0;
+        background: transparent;
+        @include box-shadow(none);
+      }
+    }
+  }
+
+
+  
+  // For aligning in grid until #15438 is done
+  .align-right {
+  	text-align: right;
+  }
+  
+  // valo menu theme
+  .valo-menu-title{
+  	text-align: right;
+  	
+  }
+  
+  //logo
+  .logo {
+	margin:12px 0;
+	background:url(img/myCar_Service_Logo.jpg) no-repeat;
+	text-indent:-9999px;
+	width:400px;
+	height:50px;
+	float:left;
+}
+
+//blue background
+.backColorBlue {
+
+	background-color:#3A82E4;
+	
+}
+
+/* -----------------
+   Header, Main menu
+   ----------------- */
+ .main-menu-button .v-button-wrap {
+	text-align: center;
+}
+
+/* ---------------------
+   Detail - Detail panel
+   ---------------------  */
+.v-csslayout-detail-panel >.v-csslayout-margin {
+	background:#f2f2f2 url(img/bg-c.gif) repeat-x;
+	padding-top: 1px;
+	padding-left: 1px;
+	border: 1px solid #cecece;
+	-moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -khtml-border-radius: 6px;
+    border-radius: 6px;
+}
+
+/* --------------------
+   Detail - Title block
+   -------------------- */
+ .title-block .v-gridlayout-spacing-on {
+ 	padding-top: 5px;
+}
+
+.smallgrid .v-grid-body .v-grid-cell {  
+    font-size: 13px;       // adjust to your needs
+}
+
+.smallgrid .v-grid-header th.v-grid-cell {
+    font-size: 12px;
+    text-align: center;
+    font-weight: bold;
+    color: black;
+}
+
+
+.v-caption-inline-label{
+  display: inline-block;
+  font-size: 12px;
+}
+
+//radio button - start
+.v-select-optiongroup-horizontal .v-select-option {
+display: inline-block;
+}
+
+.v-select-optiongroup-horizontal {
+white-space: nowrap;
+}
+
+.v-select-optiongroup-horizontal
+.v-select-option.v-radiobutton {
+	font-size: 12px;
+ 	color : black;
+	padding-right: 10px;
+}
+//radio button - end  
+
+.v-tree8 {
+  .v-tree8-scroller, .v-tree8-scroller-horizontal { }
+  .v-tree8-tablewrapper {
+    .v-tree8-body {
+      .v-tree8-row,
+      .v-tree8-stripe,
+      .v-tree8-row-focused,
+      .v-tree8-row-has-data {
+        .v-tree8-expander, expanded {}
+        .v-tree8-cell-content {font-size: 13px;  color: black !important;}
+      }
+    }
+  }
+}
+
+}
+
+.connectionexplorer .v-tree-node-selected::after {
+	border-radius: 0px;
+}
+.connectionexplorer .v-tree8-cell-content {
+    color: black;
+}
+
+.connectionexplorer .v-tree-node-caption-bold {
+	font-weight: bold;
+}
+
+.connectionexplorer .v-tabsheet-deco {
+    visibility: hidden;
+}
+
+.connectionexplorer .v-menubar-borderless .v-menubar-menuitem.v-menubar-menuitem-green {
+	color: #76aa2e;
+}
+
+.connectionexplorer .v-menubar-borderless .v-menubar-menuitem.v-menubar-menuitem-red {
+    color: #E84855;
+}
+
+.connectionexplorer .v-grid-cell.italics {
+    font-style: italic;
+}
+
+.connectionexplorer .v-grid-cell.rowheader {
+    background: #DFDFDF;
+}
+
+.connectionexplorer .v-table-cell-content-rowheader {
+    background: #DFDFDF;
+    font-weight: bold;
+}
+
+.backColorGreen {
+
+	background-color:#76aa2e;
+	
+}
+
+.backColorRed {
+
+	background-color:#E84855;
+	
+}
+
+.backColorYellow {
+
+	background-color:#FFFF00;
+	
+}
+
+.v-horizontal > .v-spacing {
+    width: 50px;
+    height: 25px;
+}
+.v-vertical > .v-spacing {
+    height: 1px;
+}
+
+
+.v-window-abssub .v-window-outerheader {
+  background: #e7eff6;
+  font-size: 15px;
+  font-weight: bold;
+  color: black;
+}
+
+/* Pale yellow window contents */
+.v-window-abssub .v-window-contents {
+  color: black;
+}
+
+/* Blue window caption text */
+.v-window-abssub .v-window-header {
+  color: black;
+}
+
+.v-csslayout-margin {
+	padding-top: 2px;
+}
+
+
+
+.v-app .v-textarea.text-label {
+    font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace !important;
+    font-weight: bold;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.blu_fg_row {
+    color: #0000ff !important;
+}    
+
+.smallgrid .v-grid-body .v-grid-cell.blu_ri_row {
+	color: #474144 !important;
+    background: #0000ff !important;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.blu_ul_row {
+    color: #0000ff !important;
+    text-decoration: underline;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.grn_row {
+    color: #339933 !important;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.grn_ri_row {
+	color: #474144 !important;
+    background: #339933 !important;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.grn_ul_row {
+    color: #339933 !important;
+    text-decoration: underline;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.grn_ul_ri_row {
+    color:#474144 !important;
+    background: #339933 !important;
+    text-decoration: underline;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.pnk_row {
+    color: #CF1071 !important;
+    
+}
+
+.smallgrid .v-grid-body .v-grid-cell.pnk_ri_row {
+	color: #474144 !important;
+    background: #CF1071 !important;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.pnk_ul_row {
+    color: #CF1071 !important;
+    
+    text-decoration: underline;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.pnk_ul_ri_row {
+    color: #474144 !important;
+    background: #CF1071 !important;
+    text-decoration: underline;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.red_row {
+    color: #FF3333 !important;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.red_hi_row {
+    color: #FF3333 !important;
+    font-weight: bold;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.red_hi_ri_row {
+	color: #474144 !important;
+    background: #FF3333 !important;
+    font-weight: bold;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.red_ri_row {
+    color: #474144 !important;
+    background: #FF3333 !important;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.red_ul_row {
+    color: #FF3333 !important;
+    text-decoration: underline;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.red_ul_bl_row {
+    color: #FF3333 !important;
+    text-decoration: underline;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.red_ul_ri_row {
+    color: #474144 !important;
+    background: #FF3333 !important;
+    text-decoration: underline;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.trq_row {
+    color: #009999 !important;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.trq_cs_ri_row {
+     color: #474144 !important;
+     background: #99ffff !important;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.trq_ul_cs_row {
+ 	color: #009999 !important;
+    text-decoration: underline;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.trq_ul_csr_row {
+ 	color: #474144 !important;
+    background: #99ffff !important;
+    text-decoration: underline;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.wht_row {
+    color: white !important;
+    background: #474144 !important;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.wht_cs_ri_row {
+    color: #474144 !important;
+    background: white !important;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.wht_ri_row {
+    color: #474144 !important;
+    background: white !important;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.wht_ul_row {
+    color: white !important;
+    background: #474144 !important;
+    text-decoration: underline;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.ylw_row {
+    color: yellow !important;
+    background: #474144 !important;
+}
+
+.smallgrid .v-grid-body .v-grid-cell.ylw_ul_cs_row {
+    color: yellow !important;
+    background: #474144 !important;
+    text-decoration: underline;
+}
+
+.v-menubar-menuitem-caption {
+	color : black !important;
+	font-weight: bold;
+}
+
+.v-form-bordered > fieldset {
+		border: thin solid;
+	    padding: 5px;
+}
+
+.abs-grid-layout .v-gridlayout-spacing-off {
+    padding-top: 4px; 
+    padding-right: 10px;
+}
+
+.v-filterselect-combobox-height-style {
+    height: 15px;
+}
+
+.v-filterselect-combobox-height-style .v-filterselect-input {
+    height: 15px;
+}
+
+.v-filterselect-combobox-height-style .v-filterselect-button {
+    height: 08px;
+}
