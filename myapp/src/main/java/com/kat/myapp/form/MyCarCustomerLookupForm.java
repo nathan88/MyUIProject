@@ -3,6 +3,7 @@ package com.kat.myapp.form;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.omg.CORBA.portable.ValueBase;
 
 import com.google.common.eventbus.EventBus;
 import com.kat.myapp.MyUI;
@@ -10,7 +11,9 @@ import com.kat.myapp.backend.database.Customer;
 import com.kat.myapp.backend.database.Lookup;
 import com.kat.myapp.backend.exception.ServiceException;
 import com.kat.myapp.event.CustomerGridChangedEvent;
+import com.kat.myapp.form.validator.EmptyFieldValidator;
 import com.vaadin.data.Binder;
+import com.vaadin.server.SerializablePredicate;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
@@ -79,18 +82,27 @@ public class MyCarCustomerLookupForm  extends VerticalLayout {
 		// ---------------- Row 4
 		messageLine = new Label("");
 		layout.addComponent(messageLine, 0, 3, 3, 3);
+		
+		SerializablePredicate<String> predicate = value -> !byName.getValue().trim().isEmpty() 
+				|| !byContactNumber.getValue().trim().isEmpty() || !byPlate.getValue().trim().isEmpty();
 
 		// binding
 		binder.forField(byName)
+				.withValidator(predicate,
+							"At least one field must be provided")
 		        .bind(Lookup::getByName, Lookup::setByName); 
 
 		// binding
 		binder.forField(byContactNumber)
+				.withValidator(predicate,
+							"At least one field must be provided")
 				.bind(Lookup::getByContactNumber, Lookup::setByContactNumber);
 
 		
 		// binding
 		binder.forField(byPlate)
+				.withValidator(predicate,
+							"At least one field must be provided")
 		        .bind(Lookup::getByPlate, Lookup::setByPlate);
 
 
