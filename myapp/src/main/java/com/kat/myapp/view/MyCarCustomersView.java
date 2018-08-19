@@ -2,6 +2,7 @@ package com.kat.myapp.view;
 
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -20,6 +21,7 @@ import com.kat.myapp.form.MyCarCustomerLookupForm;
 import com.kat.myapp.grid.MyCarCustomerGrid;
 import com.kat.myapp.grid.MyCarVehicleGrid;
 import com.kat.myapp.view.helper.CommonUiUtils;
+import com.vaadin.contextmenu.GridContextMenu;
 import com.vaadin.navigator.View;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
@@ -244,6 +246,64 @@ public class MyCarCustomersView extends VerticalLayout implements View {
 		MyUI.get().getEventBus().register(new VehicleGridChangeEventHandler(vehicleGrid));
 
 		return vehicleGridLayout;
+	}
+
+	
+	private void addVehicleGridContextMenu() {
+
+		GridContextMenu<Vehicle> contextMenu = new GridContextMenu<Vehicle>(vehicleGrid);
+		// handle header right-click grid context menu setup
+		contextMenu.addGridHeaderContextMenuListener(event -> {
+			contextMenu.removeItems();
+
+//			handleGridHeaderMenuItems(contextMenu, event);
+
+		});
+
+		// handle item right-click
+		contextMenu.addGridBodyContextMenuListener(event -> {
+			contextMenu.removeItems();
+			if (event.getItem() != null) {
+
+				Vehicle selectedConsoleItem = (Vehicle) event.getItem();
+				vehicleGrid.select(selectedConsoleItem);
+
+				Set<Vehicle> selectedItems = vehicleGrid.getSelectedItems();
+				if (selectedItems.size() == 1) {
+
+//					handleSingleRowMenuItems(contextMenu, selectedConsoleItem);
+				}
+
+				if (selectedItems.size() > 1) {
+//					handleMultiRowMenuItems(contextMenu, selectedConsoleItem, selectedItems);
+				}
+			}
+		});
+
+	}
+	
+	private void handleSingleRowMenuItems(GridContextMenu<Vehicle> contextMenu, Vehicle selectedConsoleItem) {
+
+
+//		contextMenu.addItem("Open Work Order", CommonUiUtils.detailIcon, selectedMenuItem -> {
+//			MessageDetailsDialog dialog = new MessageDetailsDialog(ABSMessageView.this, AbsUI.get().getAccessControl());
+//			dialog.showAtSize(0.7, 0.9);
+//		});
+//
+//		contextMenu.addItem("Job Properties", CommonUiUtils.jobIcon, selectedMenuItem -> {
+//			MessageJobDialog dialog = new MessageJobDialog(ABSMessageView.this, AbsUI.get().getAccessControl());
+//			dialog.showAtSize(0.9, 0.9);
+//		});
+//
+//		contextMenu.addItem("Manage Notes", CommonUiUtils.noteIcon, selectedMenuItem -> {
+//			NotesDialog dialog = new NotesDialog(ABSMessageView.this, AbsUI.get().getAccessControl());
+//			dialog.showAtSize(0.74, 0.9);
+//
+//		});
+//
+//		handleHideRowMenuItem(contextMenu, selectedConsoleItem);
+//
+//		handleUnhideRowMenuItem(contextMenu, selectedConsoleItem);
 	}
 
 	private Component createLookupBottom( ) {

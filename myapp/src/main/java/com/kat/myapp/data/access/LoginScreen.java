@@ -13,6 +13,8 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
@@ -82,11 +84,20 @@ public class LoginScreen extends CssLayout {
 		// loginForm.addComponent(image);
 		// loginForm.setComponentAlignment(image, Alignment.MIDDLE_CENTER);
 
-		Label content = new Label("										myCar: Car Service Management System");
-		content.setStyleName(ValoTheme.LABEL_H2);
-		loginFormLayout.addComponent(content);
-		loginFormLayout.setComponentAlignment(content, Alignment.TOP_LEFT);
+//		Label content = new Label("										myCar: Car Service Management System");
+//		content.setStyleName(ValoTheme.LABEL_H2);
+//		loginFormLayout.addComponent(content);
+//		loginFormLayout.setComponentAlignment(content, Alignment.TOP_LEFT);
+		HorizontalLayout header = new HorizontalLayout();
+//		Label desc = new Label("****************************");
+//		desc.setStyleName(ValoTheme.LABEL_H2);
+//		header.addComponent(desc);
+		
+		Image logo = new Image(null, new ThemeResource("img/myCar_Service_Logo.jpg"));
+		header.addComponent(logo);
 
+		loginFormLayout.addComponent(logo);
+		loginFormLayout.setComponentAlignment(logo, Alignment.TOP_CENTER);
 
 		username = new TextField("User Name");
 		username.setIcon(VaadinIcons.USER);
